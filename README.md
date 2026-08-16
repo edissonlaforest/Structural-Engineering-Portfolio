@@ -1,160 +1,188 @@
 # Edisson Laforest
-### Senior Structural Engineer | CEO | Infrastructure Consultant | Technical Infrastructure Advisor
 
-> "Engineering resilient infrastructure through technical excellence, innovation, and strategic leadership."
+### Senior Structural Engineer · Bridge & Infrastructure · Structural Assessment · BIM
 
----
+> **Engineering resilient infrastructure through technical excellence, practical design, and strategic project leadership.**
 
-## About Me
-
-I am Edisson Laforest, a Structural Engineer, Infrastructure Consultant, and Chief Executive Officer with more than 20 years of international experience leading engineering, construction, and infrastructure projects across the Caribbean and North America.
-
-Throughout my career, I have worked with private clients, contractors, consulting firms, NGOs, and international organizations, delivering structural engineering solutions, construction management, technical due diligence, infrastructure assessments, and multidisciplinary project leadership.
-
-My expertise extends beyond structural analysis. I help organizations reduce technical risks, optimize construction costs, improve project delivery, and transform complex engineering challenges into practical, buildable solutions.
-
-I believe engineering is not simply about calculations—it's about making informed decisions that protect investments, improve safety, and create lasting infrastructure.
+[![Structural Engineering](https://img.shields.io/badge/Structural-Engineering-1f4e79?style=for-the-badge)](https://github.com/edissonlaforest/Structural-Engineering-Portfolio)
+[![Bridge Engineering](https://img.shields.io/badge/Bridge-Engineering-2f6f8f?style=for-the-badge)](https://github.com/edissonlaforest/Structural-Engineering-Portfolio)
+[![BIM](https://img.shields.io/badge/BIM-Revit-8a5a44?style=for-the-badge)](https://github.com/edissonlaforest/Structural-Engineering-Portfolio)
+[![Python](https://img.shields.io/badge/Python-Engineering_Automation-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://github.com/edissonlaforest/Structural-Engineering-Portfolio)
 
 ---
 
-## Executive Leadership
+## 👷 Professional Profile
 
-Founder and Chief Executive Officer of:
+I am **Edisson Laforest**, a structural engineering and infrastructure professional with **20+ years of experience** across structural design, construction, infrastructure development, project delivery, structural assessment, and technical advisory.
 
-- Global Laforest Contractor & Service SRL
-- Groupe Edisson Construction
+My work combines:
 
-Leading multidisciplinary teams delivering engineering consulting, construction management, infrastructure development, technical advisory, and project execution.
+**Structural Analysis → Engineering Judgment → Constructability → Risk Control → Project Delivery**
 
----
-
-## Core Expertise
-
-### Structural Engineering
-
-- Reinforced Concrete Design
-- Steel Structure Design
-- Foundation Engineering
-- Bridge Engineering
-- Structural Assessment
-- Structural Rehabilitation
-- Seismic Evaluation
-- Wind Analysis
-- Structural Modeling
-
-### Construction Management
-
-- Project Planning
-- Cost Control
-- Risk Management
-- Contract Administration
-- Site Supervision
-- Quality Assurance
-- Construction Inspection
-
-### Technical Advisory
-
-- Technical Due Diligence
-- Engineering Consulting
-- Infrastructure Development
-- Owner's Representation
-- Independent Engineering Reviews
-- Feasibility Studies
-- Engineering Audits
+I focus on practical engineering solutions that are **safe, code-compliant, constructible, and economically rational**.
 
 ---
 
-## Software & Digital Engineering
+# 🌉 Featured Engineering Projects
 
-- Robot Structural Analysis
-- SAP2000
-- ETABS
-- Autodesk Revit (BIM)
-- AutoCAD
-- OpenSees
-- Microsoft Project
-- Primavera P6
+## 01 · Bridge Engineering
 
----
+Structural analysis and engineering of bridge systems with emphasis on load paths, structural behavior, seismic performance, constructability, and AASHTO LRFD requirements.
 
-## Engineering Standards
+**Tools:** SAP2000 · AutoCAD · Python  
+**Standards:** AASHTO LRFD · ACI · ASCE
 
-Experience working with:
-
-- ACI
-- AISC
-- ASCE
-- Eurocodes
-- AASHTO
-- IBC
-- CSA Standards
+[**View Bridge Engineering →**](projects/bridge-engineering/)
 
 ---
 
-## What You'll Find Here
+## 02 · RC Seismic Retrofit
 
-This repository documents engineering knowledge, technical methodologies, and selected examples of professional work, including:
+Assessment and rehabilitation of reinforced-concrete structures including seismic demand evaluation, drift control, member capacity assessment, and retrofit alternatives.
 
-- Structural Calculations
-- Bridge Engineering
-- BIM Workflows
-- Finite Element Modeling
-- Foundation Design
-- Technical Reports
-- Engineering Documentation
-- Construction Methodologies
-- Project Case Studies
-- OpenSees Simulations
-- SAP2000 Models
-- Robot Structural Analysis Models
+**Tools:** ETABS · OpenSees/OpenSeesPy · Python  
+**Standards:** ACI 318 · ASCE 7 · IBC
+
+[**View Seismic Retrofit →**](projects/seismic-retrofit/)
 
 ---
 
-## Industries Served
+## 03 · Structural Assessment & Inspection
 
-- Commercial Buildings
-- Residential Developments
-- Industrial Facilities
-- Transportation Infrastructure
-- Bridges
-- Public Infrastructure
-- Institutional Buildings
-- Energy Projects
-- Water Infrastructure
+Field-oriented structural assessment focused on identifying deterioration, structural defects, reinforcement conditions, load-path issues, and practical rehabilitation strategies.
+
+**Focus:** Inspection · Diagnosis · Testing · Structural Evaluation · Rehabilitation
+
+[**View Structural Assessment →**](projects/structural-assessment/)
 
 ---
 
-## Professional Philosophy
+## 04 · BIM & Structural Modeling
 
-Every engineering decision has technical, financial, and operational consequences.
+Digital structural engineering workflows combining BIM, structural analysis, coordination, constructability, and technical documentation.
 
-My approach combines engineering analysis, constructability, project management, and strategic thinking to deliver practical solutions that create long-term value for clients and stakeholders.
+**Tools:** Revit · AutoCAD · Robot Structural Analysis · SAP2000
+
+[**View BIM Engineering →**](projects/bim-revit/)
 
 ---
 
-## Collaboration
+## 05 · Infrastructure Engineering
 
-I welcome opportunities to collaborate on:
+Engineering support for transportation infrastructure, roads, bridges, construction projects, technical due diligence, and project delivery.
+
+**Focus:** Infrastructure · Constructability · Technical Review · Quantity Review · Project Delivery
+
+[**View Infrastructure Engineering →**](projects/infrastructure/)
+
+---
+
+# 🧰 Technical Capabilities
+
+| Discipline | Capabilities |
+|---|---|
+| **Structural Engineering** | Reinforced Concrete · Steel · Foundations · Seismic · Wind · Structural Assessment |
+| **Bridge Engineering** | Bridge Analysis · AASHTO LRFD · Structural Modeling · Rehabilitation |
+| **Construction** | Site Supervision · QA/QC · Cost Control · Construction Planning |
+| **BIM** | Revit · Structural Modeling · Coordination · Digital Documentation |
+| **Computational Engineering** | Python · OpenSeesPy · Engineering Automation · Data Processing |
+| **Technical Advisory** | Due Diligence · Independent Review · Feasibility · Owner's Representation |
+
+---
+
+# 💻 Engineering Software
+
+### Structural Analysis
+
+SAP2000 · ETABS · Robot Structural Analysis · OpenSees/OpenSeesPy · STAAD · MIDAS Civil
+
+### BIM & CAD
+
+Autodesk Revit · AutoCAD · Tekla
+
+### Programming & Automation
+
+Python · VS Code
+
+### Project Management
+
+Microsoft Project · Primavera P6
+
+---
+
+# 📐 Engineering Standards
+
+- **ACI 318** — Structural Concrete
+- **AISC** — Structural Steel
+- **ASCE 7** — Minimum Design Loads
+- **AASHTO LRFD** — Bridge Design
+- **IBC** — International Building Code
+- **Eurocodes**
+- **CSA Standards**
+
+---
+
+# 🏗️ Engineering Approach
+
+I do not treat structural engineering as calculations alone.
+
+Every engineering solution should answer five questions:
+
+1. **Is it structurally safe?**
+2. **Does it comply with the governing standards?**
+3. **Can it actually be constructed?**
+4. **Is the solution economically rational?**
+5. **Does it reduce long-term project risk?**
+
+This approach is particularly important for **existing structures, seismic rehabilitation, bridges, infrastructure, and complex construction projects**.
+
+---
+
+# 📂 Portfolio Methodology
+
+Each project case study is organized around:
+
+**Problem → Investigation → Engineering Analysis → Design → Verification → Constructability → Recommendation**
+
+Where permitted, project pages will include:
+
+- Structural models
+- Engineering drawings
+- Analysis results
+- Calculations
+- Site photographs
+- BIM models
+- Technical documentation
+- Engineering conclusions
+
+Confidential client information will be removed or anonymized.
+
+---
+
+# 🤝 Professional Collaboration
+
+Available for international engineering collaboration in:
 
 - Structural Engineering
-- Infrastructure Development
-- BIM Coordination
-- Engineering Consulting
-- Construction Management
+- Bridge Engineering
+- Seismic Assessment & Retrofit
+- Structural Inspection
+- BIM & Digital Engineering
+- Infrastructure Consulting
 - Technical Due Diligence
-- Project Delivery
-- International Engineering Projects
+- Construction Management
+- Engineering Automation with Python
 
 ---
 
-## Connect With Me
+# 📫 Connect With Me
 
-**LinkedIn**
+**LinkedIn:**  
 https://www.linkedin.com/in/edisson-laforest-78281738
 
-**Email**
+**Email:**  
 edissonconstruction@gmail.com
 
 ---
 
-*"Engineering structures is only part of the mission. Building confidence, resilience, and sustainable infrastructure is the real objective."*
+> *Engineering structures is only part of the mission. Building confidence, resilience, and sustainable infrastructure is the real objective.*
