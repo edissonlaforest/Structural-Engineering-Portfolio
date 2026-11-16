@@ -19,11 +19,11 @@ def load_search_queries(config_path: str | Path) -> list[dict[str, Any]]:
     config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8")) or {}
     searches = config.get("searches", [])
     if not isinstance(searches, list):
-        raise ValueError("The search configuration 'searches' field must be a list.")
+        raise TypeError("The search configuration 'searches' field must be a list.")
     enabled = []
     for item in searches:
         if not isinstance(item, dict):
-            raise ValueError("Each search configuration must be a mapping.")
+            raise TypeError("Each search configuration must be a mapping.")
         if item.get("enabled", False):
             query = str(item.get("query", "")).strip()
             if not query:
