@@ -11,10 +11,9 @@ from pathlib import Path
 
 import feedparser
 
+from laforest_bi.company_research import save_company_research
 from laforest_bi.models import Lead, Tender
 from laforest_bi.repository import add_lead, add_tender
-from laforest_bi.company_research import save_company_research
-
 
 def import_leads_csv(file_path: str | Path, db_path: str | None = None) -> int:
     count = 0
@@ -127,11 +126,11 @@ def import_configured_feeds(config_path: str | Path = "config/sources.yaml",
     config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8")) or {}
     feeds = config.get("feeds", [])
     if not isinstance(feeds, list):
-        raise ValueError("The sources YAML 'feeds' field must be a list")
+        raise TypeError("The sources YAML 'feeds' field must be a list")
     imported = 0
     for feed in feeds:
         if not isinstance(feed, dict):
-            raise ValueError("Each configured feed must be a mapping")
+            raise TypeError("Each configured feed must be a mapping")
         if not feed.get("enabled", False):
             continue
         url = str(feed.get("url", "")).strip()
