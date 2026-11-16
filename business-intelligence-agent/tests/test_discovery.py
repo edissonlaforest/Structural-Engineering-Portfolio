@@ -35,3 +35,25 @@ def test_import_tenders_csv(tmp_path):
                          "deadline": "2027-01-30"})
     assert import_tenders_csv(csv_path, db) == 1
     assert list_tenders(db)[0]["buyer"] == "Transport Agency"
+
+
+def test_import_companies_csv_records_verification_and_sources(tmp_path):
+    from laforest_bi.discovery import import_companies_csv
+    from laforest_bi.repository import list_companies
+
+    db = str(tmp_path / "test.sqlite3")
+    initialize_database(db)
+    csv_path = tmp_path / "companies.csv"
+    with csv_path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=[
+            "company_name", "country", "source_urls", "verification_status"
+        ])
+        writer.writeheader()
+        writer.writerow({
+            "company_name": "Verified Engineering", "country": "USA",
+            "source_urls": "https://example.org/about", "verification_status": "verified"
+        })
+    assert import_companies_csv(csv_path, db) == 1
+    companies = list_companies(db)
+    assert companies[0]["company_name"] == "Verified Engineering"
+    assert companies[0]["verification_status"] == "verified"
