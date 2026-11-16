@@ -8,15 +8,22 @@ from pathlib import Path
 import streamlit as st
 
 from laforest_bi.ai_assistant import (
-    write_research_report, draft_proposal_with_ai, suggest_lead_ratings,
+    draft_proposal_with_ai,
+    suggest_lead_ratings,
+    write_research_report,
 )
 from laforest_bi.database import initialize_database
-from laforest_bi.discovery import import_leads_csv, import_tenders_csv, import_companies_csv
-from laforest_bi.repository import (
-    dashboard_metrics, list_leads, list_tenders, list_companies,
-    update_lead_status, get_lead, save_lead_ratings,
-)
+from laforest_bi.discovery import import_companies_csv, import_leads_csv, import_tenders_csv
 from laforest_bi.qualification import qualify_lead
+from laforest_bi.repository import (
+    dashboard_metrics,
+    get_lead,
+    list_companies,
+    list_leads,
+    list_tenders,
+    save_lead_ratings,
+    update_lead_status,
+)
 
 st.set_page_config(page_title="LAFOREST AI | E-BIS", layout="wide")
 initialize_database()
@@ -47,7 +54,7 @@ with st.sidebar:
                 count = importer(temp_path)
                 st.success(f"Imported {count} {kind}.")
                 st.rerun()
-            except Exception as exc:
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
                 st.error(f"Import failed: {exc}")
             finally:
                 if temp_path and Path(temp_path).exists():
@@ -63,7 +70,7 @@ with st.sidebar:
                 count = discover_brave_leads(search_query)
             st.success(f"Added {count} unverified candidates. Review them before qualification.")
             st.rerun()
-        except Exception as exc:
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
             st.error(f"Search failed: {exc}")
 
     st.divider()
@@ -84,7 +91,7 @@ with st.sidebar:
             st.session_state["latest_research_report"] = Path(
                 result["output_path"]
             ).read_text(encoding="utf-8")
-        except Exception as exc:
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
             st.error(f"AI research failed: {exc}")
 
 metrics = dashboard_metrics()
@@ -130,7 +137,7 @@ if leads:
             with st.spinner("Researching public evidence and assessing this lead..."):
                 st.session_state["ai_lead_assessment"] = suggest_lead_ratings(current)
                 st.session_state["ai_lead_assessment_id"] = selected_id
-        except Exception as exc:
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
             st.error(f"AI qualification failed: {exc}")
 
     if st.session_state.get("ai_lead_assessment_id") == selected_id:
@@ -180,7 +187,7 @@ if leads:
                 destination.write_text(draft, encoding="utf-8")
                 st.success(f"Draft saved to {destination}")
                 st.markdown(draft)
-            except Exception as exc:
+            except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
                 st.error(f"Proposal generation failed: {exc}")
 else:
     st.info("No leads yet. Import a CSV file or use public lead discovery in the sidebar.")
