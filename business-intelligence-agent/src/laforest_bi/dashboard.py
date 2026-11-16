@@ -16,6 +16,7 @@ from laforest_bi.repository import (
     dashboard_metrics, list_leads, list_tenders, list_companies,
     update_lead_status, get_lead, save_lead_ratings,
 )
+from laforest_bi.qualification import qualify_lead
 
 st.set_page_config(page_title="LAFOREST AI | E-BIS", layout="wide")
 initialize_database()
@@ -147,9 +148,10 @@ if leads:
             })
             if st.button("Approve and save these suggested ratings"):
                 save_lead_ratings(selected_id, assessment["ratings"])
+                qualify_lead(selected_id)
                 st.session_state.pop("ai_lead_assessment", None)
                 st.session_state.pop("ai_lead_assessment_id", None)
-                st.success("Ratings saved. Run the deterministic score calculation to qualify the lead.")
+                st.success("Ratings approved, saved and scored using the transparent weighted rubric.")
                 st.rerun()
 
     with st.expander("Create an AI-assisted proposal draft"):
