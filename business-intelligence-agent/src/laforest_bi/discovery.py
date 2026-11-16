@@ -13,6 +13,7 @@ import feedparser
 
 from laforest_bi.models import Lead, Tender
 from laforest_bi.repository import add_lead, add_tender
+from laforest_bi.company_research import save_company_research
 
 
 def import_leads_csv(file_path: str | Path, db_path: str | None = None) -> int:
@@ -90,5 +91,29 @@ def import_feed_tenders(feed_url: str, source_name: str,
                 publication_date=item["published"], source_url=item["url"],
                 source_name=source_name,
             ), db_path)
+            count += 1
+    return count
+
+
+
+def import_companies_csv(file_path: str | Path, db_path: str | None = None) -> int:
+    count = 0
+    with Path(file_path).open(newline="", encoding="utf-8-sig") as stream:
+        for row in csv.DictReader(stream):
+            name = (row.get("company_name") or "").strip()
+            if not name:
+                continue
+            save_company_research(
+                name,
+                website=(row.get("website") or ""),
+                country=(row.get("country") or ""),
+                sectors=(row.get("sectors") or ""),
+                project_references=(row.get("project_references") or ""),
+                service_fit=(row.get("service_fit") or ""),
+                research_notes=(row.get("research_notes") or ""),
+                source_urls=(row.get("source_urls") or ""),
+                verification_status=(row.get("verification_status") or "needs_review"),
+                db_path=db_path,
+            )
             count += 1
     return count
