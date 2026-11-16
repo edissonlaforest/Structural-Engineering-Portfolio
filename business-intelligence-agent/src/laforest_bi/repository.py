@@ -126,3 +126,10 @@ def dashboard_metrics(path: str | None = None) -> dict[str, int]:
             "won_leads": int(db.execute(
                 "SELECT COUNT(*) FROM leads WHERE status='won'").fetchone()[0]),
         }
+
+
+
+def list_companies(path: str | None = None) -> list[dict[str, Any]]:
+    with connect(path) as db:
+        rows = db.execute("SELECT * FROM companies ORDER BY company_name COLLATE NOCASE")
+        return [dict(row) for row in rows.fetchall()]
