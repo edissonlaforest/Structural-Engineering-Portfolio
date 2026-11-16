@@ -117,3 +117,28 @@ def import_companies_csv(file_path: str | Path, db_path: str | None = None) -> i
             )
             count += 1
     return count
+
+
+def import_configured_feeds(config_path: str | Path = "config/sources.yaml",
+                             db_path: str | None = None) -> int:
+    """Import enabled tender feeds from an operator-maintained YAML registry."""
+    import yaml
+
+    config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8")) or {}
+    feeds = config.get("feeds", [])
+    if not isinstance(feeds, list):
+        raise ValueError("The sources YAML 'feeds' field must be a list")
+    imported = 0
+    for feed in feeds:
+        if not isinstance(feed, dict):
+            raise ValueError("Each configured feed must be a mapping")
+        if not feed.get("enabled", False):
+            continue
+        url = str(feed.get("url", "")).strip()
+        name = str(feed.get("name", "")).strip()
+        if not url.startswith("https://") or not name:
+            raise ValueError("Enabled feeds require a name and an HTTPS URL")
+        if feed.get("category", "tender") != "tender":
+            continue
+        imported += import_feed_tenders(url, name, db_path)
+    return imported
