@@ -1,0 +1,11 @@
+# Search terms are sent to the configured Brave Search API.
+# Keep queries focused on public business opportunities; results are unverified.
+searches: []
+# Example:
+# searches:
+#   - query: "bridge design engineering consultant procurement opportunities Canada"
+#     count: 10
+#     enabled: false
+#   - query: "structural inspection subcontractor opportunities Florida"
+#     count: 10
+#     enabled: false
