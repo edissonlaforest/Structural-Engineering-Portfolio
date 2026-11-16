@@ -7,12 +7,14 @@ from pathlib import Path
 
 import streamlit as st
 
-from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai
+from laforest_bi.ai_assistant import (
+    write_research_report, draft_proposal_with_ai, suggest_lead_ratings,
+)
 from laforest_bi.database import initialize_database
 from laforest_bi.discovery import import_leads_csv, import_tenders_csv, import_companies_csv
 from laforest_bi.repository import (
     dashboard_metrics, list_leads, list_tenders, list_companies,
-    update_lead_status, get_lead,
+    update_lead_status, get_lead, save_lead_ratings,
 )
 
 st.set_page_config(page_title="LAFOREST AI | E-BIS", layout="wide")
@@ -121,6 +123,34 @@ if leads:
         update_lead_status(selected_id, chosen_status)
         st.success("Pipeline status updated.")
         st.rerun()
+
+    if st.button("Generate AI qualification suggestion"):
+        try:
+            with st.spinner("Researching public evidence and assessing this lead..."):
+                st.session_state["ai_lead_assessment"] = suggest_lead_ratings(current)
+                st.session_state["ai_lead_assessment_id"] = selected_id
+        except Exception as exc:
+            st.error(f"AI qualification failed: {exc}")
+
+    if st.session_state.get("ai_lead_assessment_id") == selected_id:
+        assessment = st.session_state.get("ai_lead_assessment")
+        if assessment:
+            st.markdown("#### AI qualification suggestion — review before approval")
+            st.metric("Suggested score", f"{assessment['score']}/100")
+            st.write(f"Suggested priority: **{assessment['priority']}**")
+            st.write(f"Confidence indicator: {assessment['confidence']}/100")
+            st.json({
+                "ratings": assessment["ratings"],
+                "criterion_rationales": assessment["criterion_rationales"],
+                "evidence_gaps": assessment["evidence_gaps"],
+                "sources": assessment["sources"],
+            })
+            if st.button("Approve and save these suggested ratings"):
+                save_lead_ratings(selected_id, assessment["ratings"])
+                st.session_state.pop("ai_lead_assessment", None)
+                st.session_state.pop("ai_lead_assessment_id", None)
+                st.success("Ratings saved. Run the deterministic score calculation to qualify the lead.")
+                st.rerun()
 
     with st.expander("Create an AI-assisted proposal draft"):
         project_title = st.text_input("Project title")
