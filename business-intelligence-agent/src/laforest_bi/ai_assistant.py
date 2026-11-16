@@ -105,7 +105,14 @@ def draft_proposal_with_ai(fields: dict[str, str], *, model: str | None = None) 
     text = (getattr(response, "output_text", "") or "").strip()
     if not text:
         raise RuntimeError("The proposal response contained no text.")
-    return text + "\n\n> AI-assisted draft. Professional, technical, legal, and commercial review is mandatory before issue.\n"
+    # Enforce the release-control label locally: model wording is not a safety boundary.
+    if "NOT FOR ISSUE" not in text.upper():
+        text = "DRAFT — NOT FOR ISSUE\n\n" + text
+    return (
+        text
+        + "\n\n> AI-assisted draft. Professional, technical, legal, and commercial review "
+        "is mandatory before issue.\n"
+    )
 
 
 def write_research_report(output_path: str, query: str, *,
@@ -200,7 +207,7 @@ def suggest_lead_ratings(lead: dict[str, Any], *, model: str | None = None) -> d
         ),
         input=(
             "Assess this lead using public sources. Existing CRM fields are unverified unless "
-            "they contain explicit source evidence:\\n"
+            "they contain explicit source evidence:\n"
             + str(lead)
         ),
     )
