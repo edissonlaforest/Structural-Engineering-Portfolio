@@ -1,0 +1,32 @@
+consultant:
+  professional_brand: "Eng. Edisson Laforest — Senior Structural Engineer"
+  business_entities:
+    - "Global Laforest Contractor & Service SRL"
+    - "Groupe Edisson Construction"
+  positioning: "International structural engineering and infrastructure consulting"
+
+services:
+  - structural engineering and design
+  - bridge engineering and rehabilitation
+  - structural inspection and condition assessment
+  - seismic evaluation and retrofit
+  - hurricane-resistant structural solutions
+  - BIM and Revit structural modeling
+  - infrastructure and road engineering consulting
+  - technical due diligence and construction support
+  - engineering automation and Python workflows
+
+target_markets:
+  - United States
+  - Canada
+  - Dominican Republic
+  - Caribbean
+  - France
+  - Brazil
+  - Africa
+  - Middle East
+
+operating_rules:
+  - "Do not claim professional registration or local licensure unless verified for the jurisdiction."
+  - "Check local engineering practice restrictions before offering sealed design services."
+  - "Human review is required before outreach, proposals, bids, contracts, or engineering deliverables."
