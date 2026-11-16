@@ -17,7 +17,7 @@ from laforest_bi.repository import list_leads, update_lead_status
 from laforest_bi.proposals import write_proposal_draft
 from laforest_bi.database import connect
 from laforest_bi.search_provider import discover_brave_leads
-from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai
+from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai, suggest_lead_ratings
 from laforest_bi.monitor import run_monitor
 
 
@@ -54,6 +54,8 @@ def main() -> None:
     rate = commands.add_parser("rate-lead", help="Save 0-5 ratings for a lead as JSON")
     rate.add_argument("lead_id", type=int)
     rate.add_argument("ratings_json", help="JSON object with all six scoring criteria")
+    ai_score = commands.add_parser("ai-score-lead", help="Generate an AI rating suggestion for human review")
+    ai_score.add_argument("lead_id", type=int)
     score = commands.add_parser("score-lead", help="Qualify a lead using its stored ratings")
     score.add_argument("lead_id", type=int)
     status = commands.add_parser("set-status", help="Update a lead pipeline status")
@@ -115,6 +117,14 @@ def main() -> None:
                     (json.dumps(ratings), args.lead_id),
                 )
             print("Lead ratings saved.")
+        elif args.command == "ai-score-lead":
+            from laforest_bi.repository import get_lead
+            lead = get_lead(args.lead_id)
+            if lead is None:
+                raise ValueError(f"Lead {args.lead_id} was not found")
+            assessment = suggest_lead_ratings(lead)
+            print(json.dumps(assessment, indent=2, ensure_ascii=False))
+            print("AI ratings are suggestions only. Review evidence, then use rate-lead to approve ratings.")
         elif args.command == "score-lead":
             print(json.dumps(qualify_lead(args.lead_id), indent=2, ensure_ascii=False))
         elif args.command == "set-status":
