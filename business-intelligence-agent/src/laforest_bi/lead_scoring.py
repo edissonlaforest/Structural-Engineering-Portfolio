@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping
 
 DEFAULT_WEIGHTS: dict[str, int] = {
     "project_relevance": 25,
@@ -41,7 +41,7 @@ def score_opportunity(
 
     for criterion, weight in selected_weights.items():
         if isinstance(weight, bool) or not isinstance(weight, (int, float)):
-            raise ValueError(f"Weight for {criterion} must be numeric.")
+            raise TypeError(f"Weight for {criterion} must be numeric.")
         if not math.isfinite(float(weight)) or weight < 0:
             raise ValueError("Weights must be finite and non-negative.")
 
@@ -53,7 +53,7 @@ def score_opportunity(
     for criterion, weight in selected_weights.items():
         rating = ratings[criterion]
         if isinstance(rating, bool) or not isinstance(rating, (int, float)):
-            raise ValueError(f"Rating for {criterion} must be numeric.")
+            raise TypeError(f"Rating for {criterion} must be numeric.")
         if not math.isfinite(float(rating)) or not 0 <= rating <= 5:
             raise ValueError(f"Rating for {criterion} must be finite and between 0 and 5.")
         breakdown[criterion] = (float(rating) / 5.0) * float(weight)
