@@ -6,19 +6,31 @@ import argparse
 import json
 import subprocess
 import sys
+from pathlib import Path
 
+from laforest_bi.ai_assistant import (
+    draft_proposal_with_ai,
+    suggest_lead_ratings,
+    write_research_report,
+)
 from laforest_bi.database import initialize_database
 from laforest_bi.discovery import (
-    import_leads_csv, import_tenders_csv, import_feed_tenders, import_companies_csv,
+    import_companies_csv,
     import_configured_feeds,
+    import_feed_tenders,
+    import_leads_csv,
+    import_tenders_csv,
 )
-from laforest_bi.qualification import qualify_lead
-from laforest_bi.repository import list_leads, update_lead_status, save_lead_ratings, get_lead
-from laforest_bi.proposals import write_proposal_draft
-from laforest_bi.search_provider import discover_brave_leads
-from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai, suggest_lead_ratings
 from laforest_bi.monitor import run_monitor
-
+from laforest_bi.proposals import write_proposal_draft
+from laforest_bi.qualification import qualify_lead
+from laforest_bi.repository import (
+    get_lead,
+    list_leads,
+    save_lead_ratings,
+    update_lead_status,
+)
+from laforest_bi.search_provider import discover_brave_leads
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="LAFOREST AI Engineering Business Intelligence")
@@ -121,7 +133,6 @@ def main() -> None:
                 raise ValueError(f"Lead {args.lead_id} was not found")
             print("Lead status updated.")
         elif args.command == "draft-proposal":
-            from laforest_bi.repository import get_lead
             lead = get_lead(args.lead_id)
             if lead is None:
                 raise ValueError(f"Lead {args.lead_id} was not found")
