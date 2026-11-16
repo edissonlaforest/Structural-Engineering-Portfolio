@@ -147,7 +147,7 @@ def main() -> None:
         elif args.command == "dashboard":
             subprocess.run([sys.executable, "-m", "streamlit", "run",
                             "src/laforest_bi/dashboard.py"], check=False)
-    except (OSError, ValueError, subprocess.SubprocessError) as error:
+    except Exception as error:
         print(f"Error: {error}", file=sys.stderr)
         raise SystemExit(2) from error
 
