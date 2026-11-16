@@ -44,3 +44,20 @@ def test_list_leads_can_filter_by_status(tmp_path):
     update_lead_status(lead_id, "qualified", db)
     assert len(list_leads(db, status="qualified")) == 1
     assert list_leads(db, status="new") == []
+
+
+
+def test_lead_qualification_persists_score_without_destroying_ratings(tmp_path):
+    from laforest_bi.qualification import qualify_lead
+    from laforest_bi.lead_scoring import DEFAULT_WEIGHTS
+
+    db = str(tmp_path / "test.sqlite3")
+    initialize_database(db)
+    ratings = {criterion: 4 for criterion in DEFAULT_WEIGHTS}
+    lead_id = add_lead(Lead(company_name="Scoring Co", ratings=ratings), db)
+    result = qualify_lead(lead_id, db)
+    assert result["score"] == 80.0
+    stored = get_lead(lead_id, db)
+    assert stored["score"] == 80.0
+    assert stored["ratings"] == ratings
+    assert stored["status"] == "qualified"
