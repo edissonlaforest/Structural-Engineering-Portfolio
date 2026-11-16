@@ -6,7 +6,6 @@ import argparse
 import json
 import subprocess
 import sys
-from pathlib import Path
 
 from laforest_bi.ai_assistant import (
     draft_proposal_with_ai,
@@ -31,6 +30,7 @@ from laforest_bi.repository import (
     update_lead_status,
 )
 from laforest_bi.search_provider import discover_brave_leads
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="LAFOREST AI Engineering Business Intelligence")
@@ -147,7 +147,6 @@ def main() -> None:
                 "fee_basis": args.fee_basis,
             }
             if args.ai:
-                from pathlib import Path
                 output = Path(args.output)
                 output.parent.mkdir(parents=True, exist_ok=True)
                 output.write_text(draft_proposal_with_ai(proposal_fields), encoding="utf-8")
