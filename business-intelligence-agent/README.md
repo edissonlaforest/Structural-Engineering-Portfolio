@@ -39,8 +39,10 @@ From this directory:
 
 ```bash
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
-# macOS/Linux: source .venv/bin/activate
+# Windows PowerShell:
+.venv\\Scripts\\Activate.ps1
+# macOS/Linux:
+source .venv/bin/activate
 pip install -e ".[dev]"
 # Copy .env.example to .env and add your own API credentials if using live search
 pytest
