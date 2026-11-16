@@ -145,3 +145,18 @@ def list_companies(path: str | None = None) -> list[dict[str, Any]]:
     with connect(path) as db:
         rows = db.execute("SELECT * FROM companies ORDER BY company_name COLLATE NOCASE")
         return [dict(row) for row in rows.fetchall()]
+
+
+def save_lead_ratings(lead_id: int, ratings: dict[str, int | float],
+                      path: str | None = None) -> bool:
+    """Validate and save human-approved 0–5 criterion ratings for a lead."""
+    from laforest_bi.lead_scoring import score_opportunity
+
+    score_opportunity(ratings)
+    with connect(path) as db:
+        cursor = db.execute(
+            "UPDATE leads SET ratings_json=?, score=NULL, priority='', "
+            "updated_at=CURRENT_TIMESTAMP WHERE id=?",
+            (json.dumps(ratings, ensure_ascii=False), lead_id),
+        )
+        return cursor.rowcount == 1
