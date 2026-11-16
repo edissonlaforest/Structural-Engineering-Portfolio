@@ -1,7 +1,7 @@
 import pytest
 
-from laforest_bi.proposals import generate_proposal_draft
 from laforest_bi.company_research import save_company_research
+from laforest_bi.proposals import generate_proposal_draft
 
 
 def test_proposal_draft_uses_supplied_facts_and_marks_draft():
