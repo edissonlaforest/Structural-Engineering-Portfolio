@@ -3,7 +3,7 @@
 import streamlit as st
 
 from laforest_bi.database import initialize_database
-from laforest_bi.repository import dashboard_metrics, list_leads, list_tenders
+from laforest_bi.repository import dashboard_metrics, list_leads, list_tenders, list_companies
 
 st.set_page_config(page_title="LAFOREST AI | E-BIS", layout="wide")
 initialize_database()
@@ -46,3 +46,15 @@ st.warning(
     "Verify source information, eligibility, deadlines, and technical/commercial requirements "
     "before acting. This system does not send messages or submit bids."
 )
+
+
+st.subheader("Company research directory")
+companies = list_companies()
+if companies:
+    st.dataframe([{
+        "Company": item["company_name"], "Country": item["country"],
+        "Sectors": item["sectors"], "Service fit": item["service_fit"],
+        "Verification": item["verification_status"], "Sources": item["source_urls"],
+    } for item in companies], use_container_width=True, hide_index=True)
+else:
+    st.info("No company profiles yet. Import a company research CSV to populate this directory.")
