@@ -57,7 +57,9 @@ Default database: `data/laforest_bi.sqlite3`. Set `DATABASE_PATH` to change it. 
 laforest-bi init-db
 laforest-bi import-leads data/templates/leads.example.csv
 laforest-bi import-tenders data/templates/tenders.example.csv
+laforest-bi import-companies data/templates/companies.example.csv
 laforest-bi list-leads
+laforest-bi rate-lead 1 '{"project_relevance":5,"financial_potential":4,"geographic_suitability":5,"outsourcing_likelihood":4,"technical_compatibility":5,"decision_maker_accessibility":3}'
 laforest-bi score-lead 1
 laforest-bi draft-proposal 1 --output reports/proposal-draft.md --project-title "Bridge assessment" --scope "Scope approved by client" --deliverables "Assessment report"
 laforest-bi dashboard
