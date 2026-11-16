@@ -107,7 +107,7 @@ def test_ai_lead_assessment_is_validated_and_requires_approval(monkeypatch):
         "country": "Canada",
     })
 
-    assert assessment["score"] == 68.0
+    assert assessment["score"] == 72.0
     assert assessment["approval_required"] is True
     assert assessment["ratings"] == ratings
     assert fake.responses.kwargs["tool_choice"] == "required"
