@@ -18,6 +18,7 @@ from laforest_bi.proposals import write_proposal_draft
 from laforest_bi.database import connect
 from laforest_bi.search_provider import discover_brave_leads
 from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai
+from laforest_bi.monitor import run_monitor
 
 
 def main() -> None:
@@ -43,6 +44,11 @@ def main() -> None:
     research = commands.add_parser("research", help="Run sourced AI web research")
     research.add_argument("query")
     research.add_argument("--output", default="reports/research-report.md")
+    monitor = commands.add_parser("monitor", help="Run scheduled public lead and tender monitoring")
+    monitor.add_argument("--interval-hours", type=float, default=24)
+    monitor.add_argument("--once", action="store_true", help="Run one monitoring cycle and exit")
+    monitor.add_argument("--feeds-config", default="config/sources.yaml")
+    monitor.add_argument("--searches-config", default="config/search_queries.yaml")
     leads_list = commands.add_parser("list-leads", help="List CRM leads")
     leads_list.add_argument("--status")
     rate = commands.add_parser("rate-lead", help="Save 0-5 ratings for a lead as JSON")
@@ -86,6 +92,13 @@ def main() -> None:
         elif args.command == "research":
             result = write_research_report(args.output, args.query)
             print(f"Research report saved to {result['output_path']} with {len(result['sources'])} cited sources.")
+        elif args.command == "monitor":
+            run_monitor(
+                args.interval_hours,
+                feeds_config=args.feeds_config,
+                searches_config=args.searches_config,
+                run_once=args.once,
+            )
         elif args.command == "list-leads":
             print(json.dumps(list_leads(status=args.status), indent=2, ensure_ascii=False))
         elif args.command == "rate-lead":
