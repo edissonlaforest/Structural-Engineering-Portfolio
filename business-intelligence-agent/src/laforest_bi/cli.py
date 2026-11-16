@@ -28,6 +28,9 @@ def main() -> None:
     feed_import.add_argument("--source-name", required=True)
     leads_list = commands.add_parser("list-leads", help="List CRM leads")
     leads_list.add_argument("--status")
+    rate = commands.add_parser("rate-lead", help="Save 0-5 ratings for a lead as JSON")
+    rate.add_argument("lead_id", type=int)
+    rate.add_argument("ratings_json", help="JSON object with all six scoring criteria")
     score = commands.add_parser("score-lead", help="Qualify a lead using its stored ratings")
     score.add_argument("lead_id", type=int)
     status = commands.add_parser("set-status", help="Update a lead pipeline status")
@@ -58,6 +61,20 @@ def main() -> None:
             print(f"Imported {import_feed_tenders(args.url, args.source_name)} tenders.")
         elif args.command == "list-leads":
             print(json.dumps(list_leads(status=args.status), indent=2, ensure_ascii=False))
+        elif args.command == "rate-lead":
+            from laforest_bi.lead_scoring import score_opportunity
+            from laforest_bi.repository import get_lead
+            ratings = json.loads(args.ratings_json)
+            score_opportunity(ratings)  # Validate completeness and 0–5 scale before saving.
+            if get_lead(args.lead_id) is None:
+                raise ValueError(f"Lead {args.lead_id} was not found")
+            with connect() as db:
+                db.execute(
+                    "UPDATE leads SET ratings_json=?, score=NULL, priority='', "
+                    "updated_at=CURRENT_TIMESTAMP WHERE id=?",
+                    (json.dumps(ratings), args.lead_id),
+                )
+            print("Lead ratings saved.")
         elif args.command == "score-lead":
             print(json.dumps(qualify_lead(args.lead_id), indent=2, ensure_ascii=False))
         elif args.command == "set-status":
