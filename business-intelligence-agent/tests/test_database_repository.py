@@ -61,3 +61,26 @@ def test_lead_qualification_persists_score_without_destroying_ratings(tmp_path):
     assert stored["score"] == 80.0
     assert stored["ratings"] == ratings
     assert stored["status"] == "qualified"
+
+
+def test_database_initialization_migrates_legacy_leads_table(tmp_path):
+    import sqlite3
+
+    db = tmp_path / "legacy.sqlite3"
+    with sqlite3.connect(db) as connection:
+        connection.execute("""
+            CREATE TABLE leads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                company_name TEXT NOT NULL,
+                status TEXT NOT NULL DEFAULT 'new'
+            )
+        """)
+        connection.execute(
+            "INSERT INTO leads(company_name, status) VALUES (?, ?)",
+            ("Legacy Company", "new"),
+        )
+    initialize_database(str(db))
+    lead = get_lead(1, str(db))
+    assert lead is not None
+    assert lead["score"] is None
+    assert lead["priority"] == ""
