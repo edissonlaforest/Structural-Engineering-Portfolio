@@ -12,6 +12,7 @@ from laforest_bi.discovery import import_leads_csv, import_tenders_csv, import_f
 from laforest_bi.qualification import qualify_lead
 from laforest_bi.repository import list_leads, update_lead_status
 from laforest_bi.proposals import write_proposal_draft
+from laforest_bi.database import connect
 
 
 def main() -> None:
