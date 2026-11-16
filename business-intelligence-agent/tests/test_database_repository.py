@@ -72,7 +72,18 @@ def test_database_initialization_migrates_legacy_leads_table(tmp_path):
             CREATE TABLE leads (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 company_name TEXT NOT NULL,
-                status TEXT NOT NULL DEFAULT 'new'
+                contact_name TEXT DEFAULT '',
+                email TEXT DEFAULT '',
+                website TEXT DEFAULT '',
+                country TEXT DEFAULT '',
+                service_fit TEXT DEFAULT '',
+                description TEXT DEFAULT '',
+                source_url TEXT DEFAULT '',
+                source_name TEXT DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'new',
+                ratings_json TEXT NOT NULL DEFAULT '{}',
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
         """)
         connection.execute(
