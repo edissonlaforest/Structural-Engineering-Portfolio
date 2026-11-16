@@ -13,9 +13,8 @@ from laforest_bi.discovery import (
     import_configured_feeds,
 )
 from laforest_bi.qualification import qualify_lead
-from laforest_bi.repository import list_leads, update_lead_status
+from laforest_bi.repository import list_leads, update_lead_status, save_lead_ratings, get_lead
 from laforest_bi.proposals import write_proposal_draft
-from laforest_bi.database import connect
 from laforest_bi.search_provider import discover_brave_leads
 from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai, suggest_lead_ratings
 from laforest_bi.monitor import run_monitor
@@ -104,21 +103,11 @@ def main() -> None:
         elif args.command == "list-leads":
             print(json.dumps(list_leads(status=args.status), indent=2, ensure_ascii=False))
         elif args.command == "rate-lead":
-            from laforest_bi.lead_scoring import score_opportunity
-            from laforest_bi.repository import get_lead
             ratings = json.loads(args.ratings_json)
-            score_opportunity(ratings)  # Validate completeness and 0–5 scale before saving.
-            if get_lead(args.lead_id) is None:
+            if not save_lead_ratings(args.lead_id, ratings):
                 raise ValueError(f"Lead {args.lead_id} was not found")
-            with connect() as db:
-                db.execute(
-                    "UPDATE leads SET ratings_json=?, score=NULL, priority='', "
-                    "updated_at=CURRENT_TIMESTAMP WHERE id=?",
-                    (json.dumps(ratings), args.lead_id),
-                )
             print("Lead ratings saved.")
         elif args.command == "ai-score-lead":
-            from laforest_bi.repository import get_lead
             lead = get_lead(args.lead_id)
             if lead is None:
                 raise ValueError(f"Lead {args.lead_id} was not found")
