@@ -81,3 +81,18 @@ def test_configured_feed_import_skips_disabled_sources(tmp_path, monkeypatch):
     )
     assert discovery.import_configured_feeds(config) == 2
     assert calls == [("https://example.org/feed.xml", "enabled-feed")]
+
+
+def test_normalize_brave_results_marks_candidates_unverified():
+    from laforest_bi.search_provider import normalize_brave_results
+
+    payload = {"web": {"results": [{
+        "title": "Regional Bridge Consultants",
+        "url": "https://example.org/services",
+        "description": "Bridge inspection and design services."
+    }]}}
+    results = normalize_brave_results(payload, query="bridge engineering Canada")
+    assert len(results) == 1
+    assert results[0]["company_name"] == "Regional Bridge Consultants"
+    assert results[0]["source_url"] == "https://example.org/services"
+    assert "verify" in results[0]["service_fit"].lower()
