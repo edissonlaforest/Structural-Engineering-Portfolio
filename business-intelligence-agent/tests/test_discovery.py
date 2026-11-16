@@ -57,3 +57,27 @@ def test_import_companies_csv_records_verification_and_sources(tmp_path):
     companies = list_companies(db)
     assert companies[0]["company_name"] == "Verified Engineering"
     assert companies[0]["verification_status"] == "verified"
+
+
+def test_configured_feed_import_skips_disabled_sources(tmp_path, monkeypatch):
+    import laforest_bi.discovery as discovery
+
+    config = tmp_path / "sources.yaml"
+    config.write_text(
+        "feeds:\n"
+        "  - name: enabled-feed\n"
+        "    url: https://example.org/feed.xml\n"
+        "    category: tender\n"
+        "    enabled: true\n"
+        "  - name: disabled-feed\n"
+        "    url: https://example.org/disabled.xml\n"
+        "    enabled: false\n",
+        encoding="utf-8",
+    )
+    calls = []
+    monkeypatch.setattr(
+        discovery, "import_feed_tenders",
+        lambda url, name, db_path=None: calls.append((url, name)) or 2,
+    )
+    assert discovery.import_configured_feeds(config) == 2
+    assert calls == [("https://example.org/feed.xml", "enabled-feed")]
