@@ -1,0 +1,27 @@
+# Set enabled: true only after BRAVE_SEARCH_API_KEY is configured.
+# Search results are candidates and require manual verification.
+searches:
+  - query: "structural engineering subcontractor opportunities bridge design United States"
+    count: 10
+    enabled: false
+  - query: "bridge engineering consulting procurement opportunities Canada"
+    count: 10
+    enabled: false
+  - query: "structural inspection engineering consultant opportunities Florida"
+    count: 10
+    enabled: false
+  - query: "structural engineering bridge rehabilitation tenders Caribbean"
+    count: 10
+    enabled: false
+  - query: "BIM Revit structural engineering outsourcing opportunities France"
+    count: 10
+    enabled: false
+  - query: "engineering consultancy bridge infrastructure procurement Brazil"
+    count: 10
+    enabled: false
+  - query: "bridge design structural inspection tenders Africa"
+    count: 10
+    enabled: false
+  - query: "infrastructure structural engineering consulting tenders Middle East"
+    count: 10
+    enabled: false

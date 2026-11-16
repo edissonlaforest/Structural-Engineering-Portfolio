@@ -1,0 +1,9 @@
+# Add only public feeds whose terms permit automated retrieval.
+# Prefer official procurement authorities and public RSS/Atom feeds.
+feeds: []
+# Example:
+# feeds:
+#   - name: "Official procurement notices"
+#     url: "https://example.gov/procurement/rss"
+#     category: "tender"
+#     enabled: false
