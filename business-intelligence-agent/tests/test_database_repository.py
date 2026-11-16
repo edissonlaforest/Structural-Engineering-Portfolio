@@ -19,6 +19,7 @@ from laforest_bi.repository import (
     update_lead_status,
 )
 
+
 def test_lead_can_be_created_and_retrieved(tmp_path):
     db = str(tmp_path / "test.sqlite3")
     initialize_database(db)
@@ -55,7 +56,6 @@ def test_list_leads_can_filter_by_status(tmp_path):
     update_lead_status(lead_id, "qualified", db)
     assert len(list_leads(db, status="qualified")) == 1
     assert list_leads(db, status="new") == []
-
 
 
 def test_lead_qualification_persists_score_without_destroying_ratings(tmp_path):
@@ -123,7 +123,6 @@ def test_lead_and_tender_imports_deduplicate_by_source_url(tmp_path):
     ), db)
     assert first_tender == second_tender
     assert len(list_tenders(db)) == 1
-
 
 
 def test_save_lead_ratings_validates_and_resets_previous_score(tmp_path):
