@@ -1,12 +1,23 @@
+from __future__ import annotations
+
+import sqlite3
+
 import pytest
 
 from laforest_bi.database import initialize_database
+from laforest_bi.lead_scoring import DEFAULT_WEIGHTS
 from laforest_bi.models import Lead, Tender
+from laforest_bi.qualification import qualify_lead
 from laforest_bi.repository import (
-    add_lead, add_tender, get_lead, list_leads, list_tenders,
-    update_lead_status, dashboard_metrics, save_lead_ratings,
+    add_lead,
+    add_tender,
+    dashboard_metrics,
+    get_lead,
+    list_leads,
+    list_tenders,
+    save_lead_ratings,
+    update_lead_status,
 )
-
 
 def test_lead_can_be_created_and_retrieved(tmp_path):
     db = str(tmp_path / "test.sqlite3")
@@ -48,9 +59,6 @@ def test_list_leads_can_filter_by_status(tmp_path):
 
 
 def test_lead_qualification_persists_score_without_destroying_ratings(tmp_path):
-    from laforest_bi.qualification import qualify_lead
-    from laforest_bi.lead_scoring import DEFAULT_WEIGHTS
-
     db = str(tmp_path / "test.sqlite3")
     initialize_database(db)
     ratings = {criterion: 4 for criterion in DEFAULT_WEIGHTS}
@@ -64,8 +72,6 @@ def test_lead_qualification_persists_score_without_destroying_ratings(tmp_path):
 
 
 def test_database_initialization_migrates_legacy_leads_table(tmp_path):
-    import sqlite3
-
     db = tmp_path / "legacy.sqlite3"
     with sqlite3.connect(db) as connection:
         connection.execute("""
@@ -121,8 +127,6 @@ def test_lead_and_tender_imports_deduplicate_by_source_url(tmp_path):
 
 
 def test_save_lead_ratings_validates_and_resets_previous_score(tmp_path):
-    from laforest_bi.lead_scoring import DEFAULT_WEIGHTS
-
     db = str(tmp_path / "ratings.sqlite3")
     initialize_database(db)
     lead_id = add_lead(Lead(company_name="Ratings Co"), db)
