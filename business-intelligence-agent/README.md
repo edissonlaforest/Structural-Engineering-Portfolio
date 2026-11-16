@@ -63,7 +63,7 @@ laforest-bi draft-proposal 1 --output reports/proposal-draft.md --project-title 
 laforest-bi dashboard
 ```
 
-CSV import templates are provided under `data/templates/`. For production use, replace all example rows with verified source data.
+CSV import templates and an example scoring JSON are provided under `data/templates/`. For production use, replace all example rows with verified source data. Company CSV columns: `company_name,website,country,sectors,project_references,service_fit,research_notes,source_urls,verification_status`.
 
 ## RSS/Atom source configuration
 
