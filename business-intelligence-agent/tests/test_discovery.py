@@ -60,7 +60,7 @@ def test_import_companies_csv_records_verification_and_sources(tmp_path):
 
 
 def test_configured_feed_import_skips_disabled_sources(tmp_path, monkeypatch):
-    import laforest_bi.discovery as discovery
+    from laforest_bi import discovery
 
     config = tmp_path / "sources.yaml"
     config.write_text(
