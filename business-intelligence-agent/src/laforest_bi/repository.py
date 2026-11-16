@@ -13,6 +13,12 @@ from laforest_bi.models import Lead, Tender, CompanyProfile
 def add_lead(lead: Lead, path: str | None = None) -> int:
     data = lead.to_dict()
     with connect(path) as db:
+        if lead.source_url:
+            existing = db.execute(
+                "SELECT id FROM leads WHERE source_url=? LIMIT 1", (lead.source_url,)
+            ).fetchone()
+            if existing:
+                return int(existing["id"])
         cursor = db.execute(
             """INSERT INTO leads
             (company_name,contact_name,email,website,country,service_fit,description,
@@ -62,6 +68,12 @@ def update_lead_status(lead_id: int, status: str, path: str | None = None) -> bo
 
 def add_tender(tender: Tender, path: str | None = None) -> int:
     with connect(path) as db:
+        if tender.source_url:
+            existing = db.execute(
+                "SELECT id FROM tenders WHERE source_url=? LIMIT 1", (tender.source_url,)
+            ).fetchone()
+            if existing:
+                return int(existing["id"])
         cursor = db.execute(
             """INSERT INTO tenders
             (title,buyer,country,location,deadline,publication_date,estimated_value,currency,
