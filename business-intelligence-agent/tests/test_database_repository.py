@@ -4,7 +4,7 @@ from laforest_bi.database import initialize_database
 from laforest_bi.models import Lead, Tender
 from laforest_bi.repository import (
     add_lead, add_tender, get_lead, list_leads, list_tenders,
-    update_lead_status, dashboard_metrics,
+    update_lead_status, dashboard_metrics, save_lead_ratings,
 )
 
 
@@ -117,3 +117,20 @@ def test_lead_and_tender_imports_deduplicate_by_source_url(tmp_path):
     ), db)
     assert first_tender == second_tender
     assert len(list_tenders(db)) == 1
+
+
+
+def test_save_lead_ratings_validates_and_resets_previous_score(tmp_path):
+    from laforest_bi.lead_scoring import DEFAULT_WEIGHTS
+
+    db = str(tmp_path / "ratings.sqlite3")
+    initialize_database(db)
+    lead_id = add_lead(Lead(company_name="Ratings Co"), db)
+    ratings = {criterion: 3 for criterion in DEFAULT_WEIGHTS}
+    assert save_lead_ratings(lead_id, ratings, db) is True
+    stored = get_lead(lead_id, db)
+    assert stored["ratings"] == ratings
+    assert stored["score"] is None
+    assert stored["priority"] == ""
+    with pytest.raises(ValueError):
+        save_lead_ratings(lead_id, {"project_relevance": 99}, db)
