@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-from laforest_bi.lead_scoring import score_opportunity
 from laforest_bi.database import connect
+from laforest_bi.lead_scoring import score_opportunity
 from laforest_bi.repository import get_lead, update_lead_status
-
 
 def qualify_lead(lead_id: int, db_path: str | None = None) -> dict:
     lead = get_lead(lead_id, db_path)
