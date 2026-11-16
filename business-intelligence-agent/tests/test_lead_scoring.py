@@ -45,3 +45,25 @@ def test_rejects_zero_total_weight() -> None:
     weights = {criterion: 0 for criterion in DEFAULT_WEIGHTS}
     with pytest.raises(ValueError, match="greater than zero"):
         score_opportunity(ratings, weights)
+
+
+def test_rejects_non_finite_ratings() -> None:
+    ratings = full_ratings()
+    ratings["financial_potential"] = float("nan")
+    with pytest.raises(ValueError, match="finite"):
+        score_opportunity(ratings)
+
+
+def test_rejects_boolean_ratings() -> None:
+    ratings = full_ratings()
+    ratings["financial_potential"] = True
+    with pytest.raises(ValueError, match="numeric"):
+        score_opportunity(ratings)
+
+
+def test_rejects_non_finite_weights() -> None:
+    ratings = full_ratings()
+    weights = dict(DEFAULT_WEIGHTS)
+    weights["financial_potential"] = float("inf")
+    with pytest.raises(ValueError, match="finite"):
+        score_opportunity(ratings, weights)
