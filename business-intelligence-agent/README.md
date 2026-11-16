@@ -51,6 +51,10 @@ Or run the dashboard with `streamlit run src/laforest_bi/dashboard.py`.
 
 Default database: `data/laforest_bi.sqlite3`. Set `DATABASE_PATH` to change it. Keep local database files and API credentials out of Git.
 
+### Public lead search
+
+The optional Brave Search API adapter requires a valid API subscription key. Set `BRAVE_SEARCH_API_KEY` in your local environment (never commit it). Search results are saved as **unverified candidates**, not confirmed companies. Verify company identity, relevance, contact details, source accuracy, and lawful basis before moving a candidate into the active pipeline. The search adapter uses the search API and does not scrape result pages.
+
 ## CLI examples
 
 ```bash
@@ -59,6 +63,7 @@ laforest-bi import-leads data/templates/leads.example.csv
 laforest-bi import-tenders data/templates/tenders.example.csv
 laforest-bi import-configured-feeds
 laforest-bi import-companies data/templates/companies.example.csv
+laforest-bi search-leads "bridge engineering consultants Canada" --count 10
 laforest-bi list-leads
 laforest-bi rate-lead 1 '{"project_relevance":5,"financial_potential":4,"geographic_suitability":5,"outsourcing_likelihood":4,"technical_compatibility":5,"decision_maker_accessibility":3}'
 laforest-bi score-lead 1
