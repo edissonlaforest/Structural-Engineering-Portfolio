@@ -8,7 +8,7 @@ version = "0.2.0"
 description = "Engineering business intelligence, lead CRM, tender monitoring and proposal drafting"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["feedparser>=6.0.11", "PyYAML>=6.0.2", "streamlit>=1.39.0", "python-dotenv>=1.0.1"]
+dependencies = ["feedparser>=6.0.11", "PyYAML>=6.0.2", "streamlit>=1.39.0", "python-dotenv>=1.0.1", "openai>=2.0.0"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.6"]
