@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 from typing import Any
 
+
 def _client():
     try:
         from openai import OpenAI
