@@ -7,7 +7,7 @@ A human-supervised business development and market intelligence workspace for st
 1. **Global Lead Discovery** — import leads from approved public feeds, CSV files, and configured sources. Optional Brave Search API discovery stores unverified candidates with source URLs; repeated source URLs are deduplicated.
 2. **Tender Intelligence** — monitor configured RSS/Atom procurement feeds and import tender notices from CSV. Track publication date, deadline, location, buyer, eligibility, source URL, and status; repeated source URLs are deduplicated.
 3. **Company Research** — maintain evidence-backed company profiles, project references, service fit, source URLs, and research notes. Unverified facts must be marked as unverified.
-4. **AI Qualification** — deterministic weighted scoring with a clear criterion-by-criterion breakdown. AI web research supplies evidence and context, but numeric ratings remain explicit human inputs so the system does not mistake an LLM opinion for a validated commercial score.
+4. **AI Qualification** — source-grounded AI suggestions for six 0–5 ratings, criterion rationales, confidence indicator and evidence gaps. A human must explicitly approve suggested ratings; the final 0–100 score is then calculated by the deterministic weighted rubric.
 5. **CRM & Pipeline** — persist companies, leads, tenders, notes, and status changes in SQLite. PostgreSQL migration is planned for multi-user deployment.
 6. **AI Proposal Generator** — create offline template drafts or OpenAI-assisted proposal prose from approved project inputs. Missing information must remain a visible placeholder; the model must not invent credentials, references, prices, engineering calculations, or commitments.
 7. **Executive Dashboard** — Streamlit dashboard for pipeline, tender deadlines, lead priorities, and activity.
@@ -102,6 +102,8 @@ laforest-bi search-leads "bridge engineering consultants Canada" --count 10
 laforest-bi research "bridge tenders in Ontario" --output reports/bridge-tenders.md
 laforest-bi monitor --once
 laforest-bi list-leads
+laforest-bi ai-score-lead 1
+# Or enter ratings manually:
 laforest-bi rate-lead 1 '{"project_relevance":5,"financial_potential":4,"geographic_suitability":5,"outsourcing_likelihood":4,"technical_compatibility":5,"decision_maker_accessibility":3}'
 laforest-bi score-lead 1
 laforest-bi draft-proposal 1 --output reports/proposal-draft.md --project-title "Bridge assessment" --scope "Scope approved by client" --deliverables "Assessment report"
