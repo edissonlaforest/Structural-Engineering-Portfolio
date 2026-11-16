@@ -15,6 +15,7 @@ from laforest_bi.company_research import save_company_research
 from laforest_bi.models import Lead, Tender
 from laforest_bi.repository import add_lead, add_tender
 
+
 def import_leads_csv(file_path: str | Path, db_path: str | None = None) -> int:
     count = 0
     with Path(file_path).open(newline="", encoding="utf-8-sig") as stream:
