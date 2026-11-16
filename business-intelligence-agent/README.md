@@ -7,16 +7,16 @@ A human-supervised business development and market intelligence workspace for st
 1. **Global Lead Discovery** — import leads from approved public feeds, CSV files, and configured sources. Every record retains source provenance. Search-provider integrations are adapters and must use authorized APIs.
 2. **Tender Intelligence** — monitor configured RSS/Atom procurement feeds and import tender notices from CSV. Track publication date, deadline, location, buyer, eligibility, source URL, and status.
 3. **Company Research** — maintain evidence-backed company profiles, project references, service fit, source URLs, and research notes. Unverified facts must be marked as unverified.
-4. **AI Qualification** — score opportunities with a transparent weighted rubric; explain each component and priority band. Current scoring is deterministic; AI enrichment is a later optional provider.
+4. **AI Qualification** — deterministic weighted scoring with a clear criterion-by-criterion breakdown. AI web research supplies evidence and context, but numeric ratings remain explicit human inputs so the system does not mistake an LLM opinion for a validated commercial score.
 5. **CRM & Pipeline** — persist companies, leads, tenders, notes, and status changes in SQLite. PostgreSQL migration is planned for multi-user deployment.
-6. **AI Proposal Generator** — create editable proposal drafts from approved project facts and configurable service descriptions. It does not invent credentials, references, prices, engineering calculations, or commitments.
+6. **AI Proposal Generator** — create offline template drafts or OpenAI-assisted proposal prose from approved project inputs. Missing information must remain a visible placeholder; the model must not invent credentials, references, prices, engineering calculations, or commitments.
 7. **Executive Dashboard** — Streamlit dashboard for pipeline, tender deadlines, lead priorities, and activity.
 
 ## Current implementation status
 
-Initial implementation includes SQLite persistence, CSV and RSS/Atom ingestion, source attribution, company profiles, lead qualification, proposal drafting, Streamlit dashboard, CLI, tests, and CI configuration.
+The MVP includes SQLite persistence and additive schema migration, CSV and RSS/Atom ingestion, an optional Brave Search API adapter, source-attributed company profiles, deterministic lead qualification, OpenAI Responses API web research with citation extraction, AI-assisted proposal drafting, an interactive Streamlit dashboard, CLI commands, unit tests, and GitHub Actions CI.
 
-**Not yet implemented:** live search-engine discovery, external CRM synchronization, automatic email sending, paid API integrations, production authentication/multi-user access, and AI-generated research backed by live citations. Those require explicit provider configuration, API credentials stored outside Git, and separate validation.
+**Still outside this MVP:** CRM synchronization, automatic email sending, bid submission, production authentication/multi-user access, PostgreSQL deployment, managed background scheduling, and production hosting. These require separate credentials, provider configuration, security review, and operational testing.
 
 ## Scoring model
 
@@ -52,6 +52,24 @@ Or run the dashboard with `streamlit run src/laforest_bi/dashboard.py`.
 
 Default database: `data/laforest_bi.sqlite3`. Set `DATABASE_PATH` to change it. Keep local database files and API credentials out of Git.
 
+Copy `.env.example` to `.env`. Configure `OPENAI_API_KEY` for AI research and AI proposal drafting. The default model is `gpt-6-astra`; override it with `OPENAI_MODEL` if your API account uses a different supported model.
+
+### AI research and proposal drafting
+
+The `research` command uses the OpenAI Responses API with the hosted `web_search` tool and saves a Markdown report with the citation URLs returned by the API:
+
+```bash
+laforest-bi research "bridge rehabilitation procurement opportunities Ontario Canada" --output reports/ontario-bridge-research.md
+```
+
+For AI-assisted proposal drafting, add `--ai` to the normal draft command. Without `--ai`, the deterministic offline template is used:
+
+```bash
+laforest-bi draft-proposal 1 --output reports/proposal-draft.md --project-title "Bridge assessment" --scope "Client-approved scope" --deliverables "Assessment report" --ai
+```
+
+AI research and proposal generation incur API usage and charges according to your OpenAI API account. Review every report and proposal before relying on or issuing it.
+
 ### Public lead search
 
 The optional Brave Search API adapter requires a valid API subscription key. Set `BRAVE_SEARCH_API_KEY` in your local environment (never commit it). Search results are saved as **unverified candidates**, not confirmed companies. Verify company identity, relevance, contact details, source accuracy, and lawful basis before moving a candidate into the active pipeline. The search adapter uses the search API and does not scrape result pages.
@@ -65,6 +83,7 @@ laforest-bi import-tenders data/templates/tenders.example.csv
 laforest-bi import-configured-feeds
 laforest-bi import-companies data/templates/companies.example.csv
 laforest-bi search-leads "bridge engineering consultants Canada" --count 10
+laforest-bi research "bridge tenders in Ontario" --output reports/bridge-tenders.md
 laforest-bi list-leads
 laforest-bi rate-lead 1 '{"project_relevance":5,"financial_potential":4,"geographic_suitability":5,"outsourcing_likelihood":4,"technical_compatibility":5,"decision_maker_accessibility":3}'
 laforest-bi score-lead 1
@@ -90,4 +109,4 @@ Configure feeds in `config/sources.yaml`. Use official procurement portals and s
 
 ## Roadmap
 
-Next milestones: authorized public search adapters; source-specific procurement connectors; entity resolution and duplicate detection; PostgreSQL and role-based access; optional LLM summarization with source-grounded outputs; scheduled jobs and alerts; deployment hardening and security review.
+Next milestones: official procurement portal connectors by target country; duplicate detection and entity resolution; PostgreSQL and role-based access; scheduled research and alert delivery; CRM integrations; deployment hardening, monitoring, backups, and security review.
