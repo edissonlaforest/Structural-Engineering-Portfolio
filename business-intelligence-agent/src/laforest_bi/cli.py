@@ -8,7 +8,9 @@ import subprocess
 import sys
 
 from laforest_bi.database import initialize_database
-from laforest_bi.discovery import import_leads_csv, import_tenders_csv, import_feed_tenders
+from laforest_bi.discovery import (
+    import_leads_csv, import_tenders_csv, import_feed_tenders, import_companies_csv,
+)
 from laforest_bi.qualification import qualify_lead
 from laforest_bi.repository import list_leads, update_lead_status
 from laforest_bi.proposals import write_proposal_draft
@@ -23,6 +25,8 @@ def main() -> None:
     leads_import.add_argument("file")
     tenders_import = commands.add_parser("import-tenders", help="Import tenders from CSV")
     tenders_import.add_argument("file")
+    companies_import = commands.add_parser("import-companies", help="Import research profiles from CSV")
+    companies_import.add_argument("file")
     feed_import = commands.add_parser("import-feed", help="Import a configured RSS/Atom tender feed")
     feed_import.add_argument("url")
     feed_import.add_argument("--source-name", required=True)
@@ -57,6 +61,8 @@ def main() -> None:
             print(f"Imported {import_leads_csv(args.file)} leads.")
         elif args.command == "import-tenders":
             print(f"Imported {import_tenders_csv(args.file)} tenders.")
+        elif args.command == "import-companies":
+            print(f"Imported {import_companies_csv(args.file)} company profiles.")
         elif args.command == "import-feed":
             print(f"Imported {import_feed_tenders(args.url, args.source_name)} tenders.")
         elif args.command == "list-leads":
