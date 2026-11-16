@@ -6,6 +6,10 @@ import os
 import sqlite3
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 SCHEMA = """
 PRAGMA foreign_keys = ON;
 CREATE TABLE IF NOT EXISTS leads (
