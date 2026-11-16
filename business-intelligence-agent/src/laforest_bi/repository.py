@@ -9,6 +9,7 @@ from typing import Any
 from laforest_bi.database import connect
 from laforest_bi.models import CompanyProfile, Lead, Tender
 
+
 def add_lead(lead: Lead, path: str | None = None) -> int:
     data = lead.to_dict()
     with connect(path) as db:
