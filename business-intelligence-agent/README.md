@@ -42,6 +42,7 @@ python -m venv .venv
 # Windows: .venv\\Scripts\\activate
 # macOS/Linux: source .venv/bin/activate
 pip install -e ".[dev]"
+# Copy .env.example to .env and add your own API credentials if using live search
 pytest
 laforest-bi init-db
 laforest-bi dashboard
