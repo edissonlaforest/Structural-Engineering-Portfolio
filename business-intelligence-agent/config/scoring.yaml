@@ -1,0 +1,16 @@
+weights:
+  project_relevance: 25
+  financial_potential: 20
+  geographic_suitability: 15
+  outsourcing_likelihood: 15
+  technical_compatibility: 15
+  decision_maker_accessibility: 10
+
+rating_scale:
+  minimum: 0
+  maximum: 5
+
+priority_bands:
+  high_priority: 80
+  qualified: 60
+  monitor: 40
