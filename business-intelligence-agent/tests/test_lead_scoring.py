@@ -57,7 +57,7 @@ def test_rejects_non_finite_ratings() -> None:
 def test_rejects_boolean_ratings() -> None:
     ratings = full_ratings()
     ratings["financial_potential"] = True
-    with pytest.raises(ValueError, match="numeric"):
+    with pytest.raises(TypeError, match="numeric"):
         score_opportunity(ratings)
 
 
