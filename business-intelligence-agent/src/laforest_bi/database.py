@@ -87,5 +87,13 @@ def connect(path: str | Path | None = None) -> sqlite3.Connection:
 
 
 def initialize_database(path: str | Path | None = None) -> None:
+    """Create schema and apply additive migrations for databases from earlier MVP versions."""
     with connect(path) as connection:
         connection.executescript(SCHEMA)
+        lead_columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(leads)").fetchall()
+        }
+        if "score" not in lead_columns:
+            connection.execute("ALTER TABLE leads ADD COLUMN score REAL")
+        if "priority" not in lead_columns:
+            connection.execute("ALTER TABLE leads ADD COLUMN priority TEXT DEFAULT ''")
