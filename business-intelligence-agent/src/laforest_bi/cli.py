@@ -16,6 +16,7 @@ from laforest_bi.qualification import qualify_lead
 from laforest_bi.repository import list_leads, update_lead_status
 from laforest_bi.proposals import write_proposal_draft
 from laforest_bi.database import connect
+from laforest_bi.search_provider import discover_brave_leads
 
 
 def main() -> None:
@@ -35,6 +36,9 @@ def main() -> None:
         "import-configured-feeds", help="Import enabled feeds from config/sources.yaml"
     )
     configured_feeds.add_argument("--config", default="config/sources.yaml")
+    search = commands.add_parser("search-leads", help="Discover public lead candidates using Brave Search API")
+    search.add_argument("query")
+    search.add_argument("--count", type=int, default=20)
     leads_list = commands.add_parser("list-leads", help="List CRM leads")
     leads_list.add_argument("--status")
     rate = commands.add_parser("rate-lead", help="Save 0-5 ratings for a lead as JSON")
@@ -72,6 +76,8 @@ def main() -> None:
             print(f"Imported {import_feed_tenders(args.url, args.source_name)} tenders.")
         elif args.command == "import-configured-feeds":
             print(f"Imported {import_configured_feeds(args.config)} tenders.")
+        elif args.command == "search-leads":
+            print(f"Imported {discover_brave_leads(args.query, args.count)} unverified search candidates.")
         elif args.command == "list-leads":
             print(json.dumps(list_leads(status=args.status), indent=2, ensure_ascii=False))
         elif args.command == "rate-lead":
