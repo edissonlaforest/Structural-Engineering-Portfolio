@@ -95,3 +95,25 @@ def test_database_initialization_migrates_legacy_leads_table(tmp_path):
     assert lead is not None
     assert lead["score"] is None
     assert lead["priority"] == ""
+
+
+def test_lead_and_tender_imports_deduplicate_by_source_url(tmp_path):
+    db = str(tmp_path / "dedupe.sqlite3")
+    initialize_database(db)
+    first_lead = add_lead(Lead(
+        company_name="Bridge Partner", source_url="https://example.org/company"
+    ), db)
+    second_lead = add_lead(Lead(
+        company_name="Bridge Partner Updated", source_url="https://example.org/company"
+    ), db)
+    assert first_lead == second_lead
+    assert len(list_leads(db)) == 1
+
+    first_tender = add_tender(Tender(
+        title="Bridge tender", source_url="https://example.gov/tender/123"
+    ), db)
+    second_tender = add_tender(Tender(
+        title="Bridge tender duplicate", source_url="https://example.gov/tender/123"
+    ), db)
+    assert first_tender == second_tender
+    assert len(list_tenders(db)) == 1
