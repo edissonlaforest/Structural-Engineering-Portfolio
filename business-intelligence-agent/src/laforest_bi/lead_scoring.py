@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Mapping
+import math
 
 
 DEFAULT_WEIGHTS: dict[str, int] = {
@@ -39,8 +40,11 @@ def score_opportunity(
         extra = sorted(set(ratings) - set(selected_weights))
         raise ValueError(f"Rating criteria mismatch; missing={missing}, extra={extra}")
 
-    if any(weight < 0 for weight in selected_weights.values()):
-        raise ValueError("Weights must be non-negative.")
+    for criterion, weight in selected_weights.items():
+        if isinstance(weight, bool) or not isinstance(weight, (int, float)):
+            raise ValueError(f"Weight for {criterion} must be numeric.")
+        if not math.isfinite(float(weight)) or weight < 0:
+            raise ValueError("Weights must be finite and non-negative.")
 
     total_weight = float(sum(selected_weights.values()))
     if total_weight <= 0:
@@ -51,8 +55,8 @@ def score_opportunity(
         rating = ratings[criterion]
         if isinstance(rating, bool) or not isinstance(rating, (int, float)):
             raise ValueError(f"Rating for {criterion} must be numeric.")
-        if not 0 <= rating <= 5:
-            raise ValueError(f"Rating for {criterion} must be between 0 and 5.")
+        if not math.isfinite(float(rating)) or not 0 <= rating <= 5:
+            raise ValueError(f"Rating for {criterion} must be finite and between 0 and 5.")
         breakdown[criterion] = (float(rating) / 5.0) * float(weight)
 
     score = round(sum(breakdown.values()) / total_weight * 100.0, 2)
