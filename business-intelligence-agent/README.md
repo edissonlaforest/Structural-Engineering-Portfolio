@@ -56,7 +56,7 @@ Copy `.env.example` to `.env`. Configure `OPENAI_API_KEY` for AI research and AI
 
 ### Scheduled discovery monitor
 
-Enable the approved RSS/Atom feeds in `config/sources.yaml` and the search terms in `config/search_queries.yaml`. Add your Brave API key to `.env`, then run one cycle:
+The positioning, service lines, target markets and professional-practice guardrails are recorded in `config/business_profile.yaml`. Enable the approved RSS/Atom feeds in `config/sources.yaml` and the search terms in `config/search_queries.yaml` (they are disabled by default to avoid unexpected API charges). Add your Brave API key to `.env`, then run one cycle:
 
 ```bash
 laforest-bi monitor --once
