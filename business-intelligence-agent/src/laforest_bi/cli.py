@@ -17,6 +17,7 @@ from laforest_bi.repository import list_leads, update_lead_status
 from laforest_bi.proposals import write_proposal_draft
 from laforest_bi.database import connect
 from laforest_bi.search_provider import discover_brave_leads
+from laforest_bi.ai_assistant import write_research_report, draft_proposal_with_ai
 
 
 def main() -> None:
@@ -39,6 +40,10 @@ def main() -> None:
     search = commands.add_parser("search-leads", help="Discover public lead candidates using Brave Search API")
     search.add_argument("query")
     search.add_argument("--count", type=int, default=20)
+    research = commands.add_parser("research", help="Run sourced AI web research")
+    research.add_argument("query")
+    research.add_argument("--output", default="reports/research-report.md")
+    proposal.add_argument("--ai", action="store_true", help="Use OpenAI to improve the proposal prose")
     leads_list = commands.add_parser("list-leads", help="List CRM leads")
     leads_list.add_argument("--status")
     rate = commands.add_parser("rate-lead", help="Save 0-5 ratings for a lead as JSON")
@@ -78,6 +83,9 @@ def main() -> None:
             print(f"Imported {import_configured_feeds(args.config)} tenders.")
         elif args.command == "search-leads":
             print(f"Imported {discover_brave_leads(args.query, args.count)} unverified search candidates.")
+        elif args.command == "research":
+            result = write_research_report(args.output, args.query)
+            print(f"Research report saved to {result['output_path']} with {len(result['sources'])} cited sources.")
         elif args.command == "list-leads":
             print(json.dumps(list_leads(status=args.status), indent=2, ensure_ascii=False))
         elif args.command == "rate-lead":
@@ -105,12 +113,23 @@ def main() -> None:
             lead = get_lead(args.lead_id)
             if lead is None:
                 raise ValueError(f"Lead {args.lead_id} was not found")
-            output = write_proposal_draft(
-                args.output, client_name=lead["company_name"],
-                project_title=args.project_title, scope=args.scope,
-                deliverables=args.deliverables, assumptions=args.assumptions,
-                exclusions=args.exclusions, schedule=args.schedule, fee_basis=args.fee_basis,
-            )
+            proposal_fields = {
+                "client_name": lead["company_name"],
+                "project_title": args.project_title,
+                "scope": args.scope,
+                "deliverables": args.deliverables,
+                "assumptions": args.assumptions,
+                "exclusions": args.exclusions,
+                "schedule": args.schedule,
+                "fee_basis": args.fee_basis,
+            }
+            if args.ai:
+                from pathlib import Path
+                output = Path(args.output)
+                output.parent.mkdir(parents=True, exist_ok=True)
+                output.write_text(draft_proposal_with_ai(proposal_fields), encoding="utf-8")
+            else:
+                output = write_proposal_draft(args.output, **proposal_fields)
             print(f"Draft written to {output}")
         elif args.command == "dashboard":
             subprocess.run([sys.executable, "-m", "streamlit", "run",
