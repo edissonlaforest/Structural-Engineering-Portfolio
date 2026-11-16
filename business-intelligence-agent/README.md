@@ -4,8 +4,8 @@ A human-supervised business development and market intelligence workspace for st
 
 ## System modules (1–7)
 
-1. **Global Lead Discovery** — import leads from approved public feeds, CSV files, and configured sources. Every record retains source provenance. Search-provider integrations are adapters and must use authorized APIs.
-2. **Tender Intelligence** — monitor configured RSS/Atom procurement feeds and import tender notices from CSV. Track publication date, deadline, location, buyer, eligibility, source URL, and status.
+1. **Global Lead Discovery** — import leads from approved public feeds, CSV files, and configured sources. Optional Brave Search API discovery stores unverified candidates with source URLs; repeated source URLs are deduplicated.
+2. **Tender Intelligence** — monitor configured RSS/Atom procurement feeds and import tender notices from CSV. Track publication date, deadline, location, buyer, eligibility, source URL, and status; repeated source URLs are deduplicated.
 3. **Company Research** — maintain evidence-backed company profiles, project references, service fit, source URLs, and research notes. Unverified facts must be marked as unverified.
 4. **AI Qualification** — deterministic weighted scoring with a clear criterion-by-criterion breakdown. AI web research supplies evidence and context, but numeric ratings remain explicit human inputs so the system does not mistake an LLM opinion for a validated commercial score.
 5. **CRM & Pipeline** — persist companies, leads, tenders, notes, and status changes in SQLite. PostgreSQL migration is planned for multi-user deployment.
@@ -14,7 +14,7 @@ A human-supervised business development and market intelligence workspace for st
 
 ## Current implementation status
 
-The MVP includes SQLite persistence and additive schema migration, CSV and RSS/Atom ingestion, an optional Brave Search API adapter, source-attributed company profiles, deterministic lead qualification, OpenAI Responses API web research with citation extraction, AI-assisted proposal drafting, an interactive Streamlit dashboard, CLI commands, unit tests, and GitHub Actions CI.
+The MVP includes SQLite persistence and additive schema migration, CSV and RSS/Atom ingestion, an optional Brave Search API adapter, source-attributed company profiles, deterministic lead qualification, OpenAI Responses API web research with citation extraction, AI-assisted proposal drafting, an interactive Streamlit dashboard, a foreground recurring monitor, CLI commands, unit tests, and GitHub Actions CI.
 
 **Still outside this MVP:** CRM synchronization, automatic email sending, bid submission, production authentication/multi-user access, PostgreSQL deployment, managed background scheduling, and production hosting. These require separate credentials, provider configuration, security review, and operational testing.
 
@@ -54,6 +54,22 @@ Default database: `data/laforest_bi.sqlite3`. Set `DATABASE_PATH` to change it. 
 
 Copy `.env.example` to `.env`. Configure `OPENAI_API_KEY` for AI research and AI proposal drafting. The default model is `gpt-6-astra`; override it with `OPENAI_MODEL` if your API account uses a different supported model.
 
+### Scheduled discovery monitor
+
+Enable the approved RSS/Atom feeds in `config/sources.yaml` and the search terms in `config/search_queries.yaml`. Add your Brave API key to `.env`, then run one cycle:
+
+```bash
+laforest-bi monitor --once
+```
+
+To keep monitoring every 24 hours in the foreground:
+
+```bash
+laforest-bi monitor --interval-hours 24
+```
+
+Keep the machine awake and the process running, or register the command with Windows Task Scheduler, cron, or another process manager. This monitor writes to the local SQLite database; it does not send emails or submit tenders. Duplicate source URLs are skipped.
+
 ### AI research and proposal drafting
 
 The `research` command uses the OpenAI Responses API with the hosted `web_search` tool and saves a Markdown report with the citation URLs returned by the API:
@@ -84,6 +100,7 @@ laforest-bi import-configured-feeds
 laforest-bi import-companies data/templates/companies.example.csv
 laforest-bi search-leads "bridge engineering consultants Canada" --count 10
 laforest-bi research "bridge tenders in Ontario" --output reports/bridge-tenders.md
+laforest-bi monitor --once
 laforest-bi list-leads
 laforest-bi rate-lead 1 '{"project_relevance":5,"financial_potential":4,"geographic_suitability":5,"outsourcing_likelihood":4,"technical_compatibility":5,"decision_maker_accessibility":3}'
 laforest-bi score-lead 1
@@ -109,4 +126,4 @@ Configure feeds in `config/sources.yaml`. Use official procurement portals and s
 
 ## Roadmap
 
-Next milestones: official procurement portal connectors by target country; duplicate detection and entity resolution; PostgreSQL and role-based access; scheduled research and alert delivery; CRM integrations; deployment hardening, monitoring, backups, and security review.
+Next milestones: official procurement portal connectors by target country; richer entity resolution beyond source-URL deduplication; PostgreSQL and role-based access; alert delivery and CRM integrations; deployment hardening, monitoring, backups, and security review.
