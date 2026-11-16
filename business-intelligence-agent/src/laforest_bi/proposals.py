@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from datetime import date
+from pathlib import Path
 
 
 def generate_proposal_draft(
