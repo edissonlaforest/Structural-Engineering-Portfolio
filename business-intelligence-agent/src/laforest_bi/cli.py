@@ -10,6 +10,7 @@ import sys
 from laforest_bi.database import initialize_database
 from laforest_bi.discovery import (
     import_leads_csv, import_tenders_csv, import_feed_tenders, import_companies_csv,
+    import_configured_feeds,
 )
 from laforest_bi.qualification import qualify_lead
 from laforest_bi.repository import list_leads, update_lead_status
@@ -30,6 +31,10 @@ def main() -> None:
     feed_import = commands.add_parser("import-feed", help="Import a configured RSS/Atom tender feed")
     feed_import.add_argument("url")
     feed_import.add_argument("--source-name", required=True)
+    configured_feeds = commands.add_parser(
+        "import-configured-feeds", help="Import enabled feeds from config/sources.yaml"
+    )
+    configured_feeds.add_argument("--config", default="config/sources.yaml")
     leads_list = commands.add_parser("list-leads", help="List CRM leads")
     leads_list.add_argument("--status")
     rate = commands.add_parser("rate-lead", help="Save 0-5 ratings for a lead as JSON")
@@ -65,6 +70,8 @@ def main() -> None:
             print(f"Imported {import_companies_csv(args.file)} company profiles.")
         elif args.command == "import-feed":
             print(f"Imported {import_feed_tenders(args.url, args.source_name)} tenders.")
+        elif args.command == "import-configured-feeds":
+            print(f"Imported {import_configured_feeds(args.config)} tenders.")
         elif args.command == "list-leads":
             print(json.dumps(list_leads(status=args.status), indent=2, ensure_ascii=False))
         elif args.command == "rate-lead":
